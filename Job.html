@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Listings</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .job-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .job-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .job-organization {
+            font-size: 1.2rem;
+            color: #555;
+        }
+        .job-location {
+            font-size: 1rem;
+            color: #777;
+        }
+        .job-description {
+            font-size: 0.9rem;
+            color: #666;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .filter-container {
+            margin-bottom: 20px;
+        }
+        .apply-btn {
+            background-color: #007bff;
+            border: none;
+            transition: background-color 0.2s;
+        }
+        .apply-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Job Listings</h1>
+        <div class="filter-container">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search by job title or location...">
+        </div>
+        <div id="jobListings" class="row">
+            <!-- Job cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Job data from the provided JSON
+        const jobs = [
+            {
+                "id": "1854377828",
+                "title": "Data Engineer",
+                "organization": "West Monroe",
+                "locations_derived": [
+                    "Los Angeles, California, United States",
+                    "San Francisco, California, United States",
+                    "Chicago, Illinois, United States",
+                    "New York, New York, United States",
+                    "Dallas, Texas, United States",
+                    "Seattle, Washington, United States"
+                ],
+                "description_text": "Are you ready to make an impact? West Monroe is seeking a talented Data Engineer to join our Data Engineering & Analytics team. In this role, you will collaborate with our clients to address their most complex needs, working alongside a team of highly skilled engineers and architects...",
+                "url": "https://westmonroe.com/careers/job-details-experienced-professionals?gh_jid=5625114004",
+                "remote_derived": false
+            },
+            {
+                "id": "1854367138",
+                "title": "Data Engineer",
+                "organization": "PA Consulting",
+                "locations_derived": ["Boston, Massachusetts, United States"],
+                "description_text": "We believe in the power of ingenuity to build a positive human future. As strategies, technologies, and innovation collide, we create opportunity from complexity...",
+                "url": "https://jobs.smartrecruiters.com/PAConsulting/744000077282478-data-engineer",
+                "remote_derived": false
+            },
+            {
+                "id": "1854370021",
+                "title": "Data Engineer",
+                "organization": "Strata Decision Technology",
+                "locations_derived": ["Chicago, Illinois, United States"],
+                "description_text": "As a Data Engineer, you will have the opportunity to work on technical infrastructures that will help many of the nation’s leading healthcare providers in utilizing their financial, operational, and clinical data...",
+                "url": "https://job-boards.greenhouse.io/stratacareers/jobs/6685754003",
+                "remote_derived": false
+            },
+            {
+                "id": "1854329759",
+                "title": "Data Engineer - Tech Operations",
+                "organization": "Sigma Computing",
+                "locations_derived": ["San Francisco, California, United States"],
+                "description_text": "We’re hiring our first Data Engineer within Tech Operations at Sigma. In this role, you’ll build the data foundation that powers critical insights across Engineering and Tech Operations...",
+                "url": "https://job-boards.greenhouse.io/sigmacomputing/jobs/6688267003",
+                "remote_derived": false
+            },
+            {
+                "id": "1854309959",
+                "title": "Data Engineer II (Remote)",
+                "organization": "Inspira Financial",
+                "locations_derived": ["Oak Brook, Illinois, United States"],
+                "description_text": "We are seeking a talented Data Engineer to join our growing team. This role is responsible for collaborating with an experienced team of engineers and business stakeholders to create scalable data platform solutions...",
+                "url": "https://myjobs.adp.com/inspiracareers/cx/job-details?reqId=5001118663106",
+                "remote_derived": true
+            },
+            {
+                "id": "1854297131",
+                "title": "Principal Data Engineer",
+                "organization": "West Monroe",
+                "locations_derived": [
+                    "Los Angeles, California, United States",
+                    "San Francisco, California, United States",
+                    "Chicago, Illinois, United States",
+                    "Minneapolis, Minnesota, United States",
+                    "New York, New York, United States",
+                    "Dallas, Texas, United States",
+                    "Seattle, Washington, United States"
+                ],
+                "description_text": "As a Principal Data Engineer at West Monroe, you will lead the design, implementation, and optimization of data solutions that empower our clients to make data-driven decisions...",
+                "url": "https://westmonroe.com/careers/job-details-experienced-professionals?gh_jid=5624961004",
+                "remote_derived": false
+            },
+            {
+                "id": "1854195763",
+                "title": "Principal Data Engineer (Remote - UK)",
+                "organization": "Jobgether",
+                "locations_derived": ["United Kingdom"],
+                "description_text": "We are seeking an accomplished data engineering leader to shape the next generation of our data platform and capabilities. In this role, you will architect and deliver scalable, secure, and intelligent data systems...",
+                "url": "https://jobs.workable.com/view/apuebTZ2LJkBVSj9u5vd2z/principal-data-engineer-(remote---uk)-in-united-kingdom-at-jobgether",
+                "remote_derived": true
+            },
+            {
+                "id": "1854173598",
+                "title": "Staff Data Engineer",
+                "organization": "Booksy",
+                "locations_derived": ["United Kingdom"],
+                "description_text": "As a Marketing Data Engineering Lead (Staff Engineer) reporting to the Head of Data Engineering in our Data Engineering team, your purpose will be to design and own the technical foundation that proves and improves marketing ROI at Booksy...",
+                "url": "https://jobs.workable.com/view/p2iiwTUmxTeCo64JzPSmbA/remote-staff-data-engineer-in-united-kingdom-at-booksy",
+                "remote_derived": true
+            },
+            {
+                "id": "1854173599",
+                "title": "Staff Data Engineer",
+                "organization": "Booksy",
+                "locations_derived": ["United Kingdom"],
+                "description_text": "As a Customer Data Engineering Lead (Staff Engineer) reporting to the Head of Data Engineering in our Data Engineering team, your purpose will be to build the technical foundation that powers a complete, 360-degree view of our customers and providers...",
+                "url": "https://jobs.workable.com/view/sdqySBv5Zkc5grmyCb1SY7/remote-staff-data-engineer-in-united-kingdom-at-booksy",
+                "remote_derived": true
+            }
+        ];
+
+        // Function to render job cards
+        function renderJobs(jobsToDisplay) {
+            const jobListings = document.getElementById('jobListings');
+            jobListings.innerHTML = '';
+
+            jobsToDisplay.forEach(job => {
+                const jobCard = document.createElement('div');
+                jobCard.className = 'col-md-6 col-lg-4';
+                jobCard.innerHTML = `
+                    <div class="job-card card p-3">
+                        <div class="card-body">
+                            <h5 class="job-title">${job.title}</h5>
+                            <h6 class="job-organization">${job.organization}</h6>
+                            <p class="job-location">${job.remote_derived ? 'Remote' : ''} ${job.locations_derived.join(', ')}</p>
+                            <p class="job-description">${job.description_text}</p>
+                            <a href="${job.url}" target="_blank" class="btn btn-primary apply-btn">Apply Now</a>
+                        </div>
+                    </div>
+                `;
+                jobListings.appendChild(jobCard);
+            });
+        }
+
+        // Initial render
+        renderJobs(jobs);
+
+        // Search filter functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredJobs = jobs.filter(job => 
+                job.title.toLowerCase().includes(searchTerm) || 
+                job.locations_derived.some(loc => loc.toLowerCase().includes(searchTerm))
+            );
+            renderJobs(filteredJobs);
+        });
+    </script>
+</body>
+</html>
